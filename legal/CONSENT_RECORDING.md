@@ -18,8 +18,9 @@ We want to record [the meeting / conversation / voice note] on [date] and use it
 1. Die opname word met die hand getranskribeer en gebruik om modelle te meet (foutkoers). / The recording is transcribed by hand and used to measure model accuracy.
 2. [Opsioneel / Optional] Die opname en transkripsie word gebruik om die model verder op te lei. / The recording and transcript are used to further train the model.
 3. Die opname word nie gepubliseer of aan derde partye verkoop nie. / The recording is not published or sold to third parties.
-4. Die opname mag na 'n verskaffer van rekenaarkrag buite Suid-Afrika gestuur word vir verwerking onder 'n dataverwerkingsooreenkoms. / The recording may be sent to a computing provider outside South Africa for processing under a data-processing agreement. [Delete if processing stays in-country.]
-5. Jy kan jou toestemming enige tyd terugtrek deur [e-pos]; die opname word dan binne 30 dae geskrap, behalwe waar dit reeds in 'n opgeleide model opgeneem is. / You may withdraw consent at any time by emailing [address]; the recording is then deleted within 30 days, except where it has already been incorporated into a trained model.
+4. Die opname sal nooit gebruik word om jou stem na te boots, te kloon of te sintetiseer nie; dit lei slegs 'n model op wat luister, nie een wat praat nie. / The recording will never be used to imitate, clone or synthesise your voice; it trains only a model that listens, never one that speaks.
+5. Die opname mag na 'n verskaffer van rekenaarkrag buite Suid-Afrika gestuur word vir verwerking onder 'n dataverwerkingsooreenkoms. / The recording may be sent to a computing provider outside South Africa for processing under a data-processing agreement. [Delete if processing stays in-country.]
+6. Jy kan jou toestemming enige tyd terugtrek deur [e-pos]; die opname word dan binne 30 dae geskrap, behalwe waar dit reeds in 'n opgeleide model opgeneem is. / You may withdraw consent at any time by emailing [address]; the recording is then deleted within 30 days, except where it has already been incorporated into a trained model.
 
 ## Bewaring / Retention
 

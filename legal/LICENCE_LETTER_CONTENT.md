@@ -20,7 +20,7 @@ The Licensor grants the Licensee a non-exclusive, worldwide, royalty-free licenc
 
 ## 3. Restrictions
 
-The Licensee will not publish or redistribute the Material or its transcripts, and will not use the Material for any purpose other than clause 2.
+The Licensee will not publish or redistribute the Material or its transcripts, and will not use the Material for any purpose other than clause 2. In particular, the Licensee will never use the Material to synthesise, clone or imitate any person's voice, and will not train or license any text-to-speech or voice-conversion model on it.
 
 ## 4. Attribution
 

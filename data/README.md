@@ -15,6 +15,10 @@ Audio and real transcripts are **never committed**; `.gitignore` excludes them. 
 
 Include heavy Afrikaans–English code-switching in each source. Vary accents, microphones and background noise.
 
+## Who does this
+
+The collection and transcription job is described in `docs/DATA_LEAD_BRIEF.md`, written for the data lead.
+
 ## Consent
 
 Every recording needs a signed `legal/CONSENT_RECORDING.md` from each participant, or a `legal/LICENCE_LETTER_CONTENT.md` from the copyright owner for existing content (for example a YouTube creator's own videos). Store signed forms outside the repo and reference them by `consent_id` in the manifest.

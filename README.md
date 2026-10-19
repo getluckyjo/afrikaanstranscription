@@ -11,7 +11,7 @@ reports/      Feasibility research and the phased build plan (read these first)
 research_notes/  Raw research notes behind the report
 benchmark/    Scripts to normalise audio, run candidate models, and score WER/CER/DER
 data/         Test-set manifests. Audio and transcripts are git-ignored (personal data)
-docs/         Benchmark results and decisions
+docs/         Benchmark results, decisions, the data lead brief and the dashboard page
 legal/        POPIA/RICA checklist, consent and licence templates, privacy notice draft
 ```
 
