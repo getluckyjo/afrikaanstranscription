@@ -64,6 +64,16 @@ The correction loop is: the line plays, you fix the text, you press `Enter`. Tha
 
 The older one-box page is still there if you prefer it: `python app/ui.py` (port 7860). Its `--share` flag prints a temporary public link that routes to your Mac, which is the simplest way to let Pietie try it for a session. Only share audio that way with people who have consented.
 
+## 4b. Desktop shortcut (no Terminal needed after this)
+
+Once, from the project folder:
+
+```bash
+bash app/mac/install_shortcut.sh
+```
+
+That puts **Watsejy** on your Desktop. Double-click it to start: a small window opens, the browser opens on the editor, and closing the window stops it. If Watsejy is already running, the shortcut just opens the browser again.
+
 ## 5. Build the test set while you work
 
 When a transcript is corrected, pick the source at the bottom of the editor (stemboodskap, vergadering in persoon, aanlyn vergadering, voorgelees), tick the code-switching box if there is a lot of English, and press **Stoor na ~/Watsejy**. This copies the audio to `~/Watsejy/audio/`, writes the corrected text to `~/Watsejy/transcripts/`, and appends a row to `~/Watsejy/corrections.jsonl` in the same shape as `data/test/manifest.jsonl`. Uploads sit in `~/Watsejy/uploads/` and can be deleted at any time. When you have a few hours of corrections, that file is the benchmark test set, and later the fine-tuning data.

@@ -150,6 +150,13 @@ def main() -> None:
     args = ap.parse_args()
     UPLOADS.mkdir(parents=True, exist_ok=True)
     url = f"http://127.0.0.1:{args.port}"
+    import socket
+    with socket.socket() as probe:
+        if probe.connect_ex(("127.0.0.1", args.port)) == 0:
+            print(f"Watsejy is already running at {url}; opening it.")
+            if not args.no_browser:
+                webbrowser.open(url)
+            return
     if not args.no_browser:
         threading.Timer(1.0, lambda: webbrowser.open(url)).start()
     print(f"Watsejy editor at {url}  (Ctrl+C to stop)")
