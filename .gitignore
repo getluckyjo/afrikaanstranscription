@@ -1,0 +1,36 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Models and caches (large, downloaded on demand)
+models/
+.cache/
+*.bin
+*.gguf
+*.ggml
+*.mlmodelc/
+
+# Audio and personal data: never commit recordings or real transcripts
+data/raw/
+data/test/wav/
+data/test/manifest.jsonl
+data/**/*.wav
+data/**/*.opus
+data/**/*.ogg
+data/**/*.m4a
+data/**/*.mp3
+data/**/*.mp4
+data/**/*.flac
+data/**/*.webm
+data/**/*.rttm
+
+# Benchmark outputs (regenerate; summaries go in docs/benchmarks.md)
+results/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

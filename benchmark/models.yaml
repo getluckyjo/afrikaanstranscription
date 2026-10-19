@@ -1,0 +1,51 @@
+# Candidate models for the Phase 0 benchmark.
+#
+# `model` is passed straight to faster_whisper.WhisperModel(), so it can be a
+# Hugging Face repo id that already contains a CTranslate2 build, a local
+# directory, or a stock size alias (large-v3, large-v3-turbo, medium).
+#
+# Expectations come from the research report; all published numbers are on
+# read speech or clean benchmarks, so expect worse on real meetings.
+
+defaults:
+  language: af          # force Afrikaans; auto-detect flips to English/Dutch
+  beam_size: 5
+  vad_filter: true
+  compute_type: int8_float16   # ~1.5 GB VRAM for turbo; use int8 on CPU
+
+models:
+  - name: fluister-turbo
+    model: digiphyte/fluister-turbo
+    licence: MIT
+    notes: large-v3-turbo fine-tune on afrikaans-30s + NCHLT af/en, trained for code-switching. Expected default.
+
+  - name: fluister-medium
+    model: digiphyte/fluister-medium
+    licence: MIT
+    notes: medium-size fine-tune for low-end laptops. No published WER; measure it.
+
+  - name: fluister-large-v3
+    model: digiphyte/fluister-large-v3
+    licence: MIT
+    notes: largest Fluister; too slow for most laptops but a useful quality ceiling.
+
+  - name: sunbird-51
+    model: Sunbird/faster-whisper-51-african-languages
+    licence: Apache-2.0 (gated; accept terms on Hugging Face and set HF_TOKEN)
+    notes: 51-language large-v3 fine-tune, 9.6% WER on its own Afrikaans test.
+
+  - name: buzzasr-afrikaans
+    model: models/buzzasr-afrikaans-ct2
+    licence: MIT
+    notes: transformers format; run benchmark/convert_to_ct2.sh first. 16% WER on FLEURS+CV.
+    requires_conversion: BuzzASR/afrikaans
+
+  - name: whisper-large-v3-turbo
+    model: large-v3-turbo
+    licence: MIT
+    notes: stock baseline the fine-tunes must beat.
+
+  - name: whisper-large-v3
+    model: large-v3
+    licence: MIT
+    notes: stock baseline, ~33% WER on FLEURS+CV, 66–78% on SA corpora.

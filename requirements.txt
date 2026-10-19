@@ -1,0 +1,15 @@
+# Phase 0 benchmark environment. Python 3.10+.
+# GPU: install a CUDA-enabled torch first if pyannote will run on GPU.
+faster-whisper>=1.1.0
+ctranslate2>=4.4.0
+transformers>=4.45.0
+huggingface_hub>=0.25.0
+jiwer>=3.0.0
+pyyaml>=6.0
+soundfile>=0.12.1
+tqdm>=4.66.0
+# Diarization (optional; accept the gated model terms on Hugging Face first)
+pyannote.audio>=3.1.0
+pyannote.metrics>=3.2
+# Needed only for converting transformers-format models (BuzzASR) to CTranslate2
+torch>=2.2.0
