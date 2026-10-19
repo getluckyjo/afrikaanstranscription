@@ -2,6 +2,12 @@
 
 These are drafts and working notes, not legal advice. Have a South African attorney review the notice and consent before public launch.
 
+## Name and domain
+
+- [ ] Register watsejy.co.za (and watsejy.com if available) with a ZACR-accredited registrar; set up email on it.
+- [ ] Reserve the @watsejy handles on the social platforms you will use.
+- [ ] Search the CIPC trade mark register for "Watsejy" / "Wat sê jy" before investing in branding.
+
 ## Before any real audio is collected
 
 - [ ] Decide the legal entity that is the "responsible party" under POPIA (individual, company, or NPO). An NPO keeps WhatsApp service messages free until end-2027 if that channel is ever built.

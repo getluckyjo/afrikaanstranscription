@@ -3,7 +3,7 @@
 _Draft template for a creator (for example a YouTube channel owner) who licenses their own recordings to the project. Replace the bracketed fields and keep the signed copy outside the repository._
 
 **Licensor / Lisensiegewer:** [Name], owner of [channel or collection name]
-**Licensee / Lisensienemer:** [Project entity name]
+**Licensee / Lisensienemer:** [Legal entity name] trading as Watsejy (watsejy.co.za)
 **Date / Datum:** [date]
 
 ## 1. Material

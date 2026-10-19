@@ -2,7 +2,7 @@
 
 _Draft template. Replace the bracketed fields. Keep the signed copy outside the repository and record its `consent_id` in the manifest._
 
-**Projek / Project:** [Project name] Afrikaans spraakherkenning / Afrikaans speech recognition
+**Projek / Project:** Watsejy (watsejy.co.za), Afrikaanse spraakherkenning / Afrikaans speech recognition
 **Verantwoordelike party / Responsible party:** [Entity name, address, email]
 **Inligtingsbeampte / Information Officer:** [Name, email]
 **Toestemmingsnommer / Consent ID:** C-[0000]

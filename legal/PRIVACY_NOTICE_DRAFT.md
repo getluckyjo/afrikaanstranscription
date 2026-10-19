@@ -8,7 +8,7 @@ _Working draft for the public notice. Afrikaans version to be prepared once the 
 
 ## 1. What this service does
 
-[App name] turns Afrikaans speech into text. By default it runs entirely on your own device: the recording and the transcript stay on your computer or phone, and nothing is sent to us.
+Watsejy (watsejy.co.za) turns Afrikaans speech into text. By default it runs entirely on your own device: the recording and the transcript stay on your computer or phone, and nothing is sent to us.
 
 ## 2. Information we process
 

@@ -1,4 +1,4 @@
-# Build steps: local-first Afrikaans meeting transcriber
+# Build steps: Watsejy (watsejy.co.za), a local-first Afrikaans meeting transcriber
 
 Step-by-step plan for a desktop app that listens to online or in-person meetings, transcribes Afrikaans (and Afrikaans-English code-switching) on the user's own machine, separates speakers, and lets the user name each speaker at the end. WhatsApp voice notes are handled by file sharing, and a WhatsApp bot is an optional late addition. Based on the research in `Afrikaans transcription tool feasibility.md`; see that report for sources and numbers.
 
