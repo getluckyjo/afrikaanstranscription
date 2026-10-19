@@ -1,0 +1,11 @@
+# Watsejy personal MVP on a Mac. Python 3.10 or newer.
+# Apple Silicon transcription:
+mlx-whisper>=0.4.3
+# Fallback on Intel Macs (CPU):
+faster-whisper>=1.1.0
+# Drag-and-drop page:
+gradio>=5.0
+# Speaker labelling (optional; large download because of torch):
+pyannote.audio>=3.1
+torch>=2.2
+huggingface_hub>=0.25

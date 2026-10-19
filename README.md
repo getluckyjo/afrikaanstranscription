@@ -4,9 +4,20 @@
 
 This repository currently holds **Phase 0**: the research, the legal groundwork, and the benchmark harness that decides which Afrikaans model ships in the app. Nothing here processes user audio in production yet.
 
+## Use it on your Mac today
+
+The personal MVP lives in `app/`: a command-line transcriber and a local drag-and-drop page that run entirely on your machine. See `app/README.md` for the ten-minute install.
+
+```bash
+python app/watsejy.py voicenote.opus            # transcript next to the file
+python app/watsejy.py meeting.m4a --speakers    # with speaker labels
+python app/ui.py                                # drag-and-drop page at http://127.0.0.1:7860
+```
+
 ## Layout
 
 ```
+app/          Personal Mac MVP: engine, command line, drag-and-drop page
 reports/      Feasibility research and the phased build plan (read these first)
 research_notes/  Raw research notes behind the report
 benchmark/    Scripts to normalise audio, run candidate models, and score WER/CER/DER
