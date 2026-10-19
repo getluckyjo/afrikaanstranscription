@@ -45,25 +45,25 @@ python app/watsejy.py meeting.m4a --speakers --num-speakers 4
 
 Speakers come out as `SPREKER 1`, `SPREKER 2` …; rename them in the page (next step) or with find-and-replace.
 
-## 4. The drag-and-drop page
+## 4. The editor: drop a file, fix the text against the audio
 
 ```bash
-python app/ui.py
+python app/web.py
 ```
 
-A browser tab opens at http://127.0.0.1:7860. Drop a file, tick "Benoem sprekers" for meetings, press **Transkribeer**. You can edit the text, rename speakers (`1=Johannes, 2=Pietie`), and download `.txt`, `.md` and `.srt`.
+A browser tab opens at http://127.0.0.1:7861. Drag a voice note or recording onto the page (tick "Benoem sprekers" first for meetings). When it finishes you get one line per segment with its timestamp, speaker and text:
 
-To let Pietie try it from his own machine for a session:
+- Click a timestamp to play from there. The line being played is highlighted.
+- Edit the text in place. Boxes grow as you type.
+- `Esc` plays or pauses. `⌘↓` / `⌘↑` jumps to the next or previous line and plays it. `⌘←` goes back three seconds. `⌘Enter` replays the current line. The speed menu slows the audio for fast talkers.
+- Rename speakers once for the whole file with `1=Johannes, 2=Pietie`, or type a name on any line.
+- Download `.txt`, `.md` or `.srt`, or copy the plain text.
 
-```bash
-python app/ui.py --share
-```
-
-This prints a temporary public link that routes through Gradio's relay to your Mac. Close the terminal to end it. Only share audio this way with people who have consented.
+The older one-box page is still there if you prefer it: `python app/ui.py` (port 7860). Its `--share` flag prints a temporary public link that routes to your Mac, which is the simplest way to let Pietie try it for a session. Only share audio that way with people who have consented.
 
 ## 5. Build the test set while you work
 
-After correcting a transcript against the audio, open **Stoor gekorrigeerde transkripsie**, pick the source (voicenote, inperson, online, read), tick the code-switching box if there is a lot of English, and press **Stoor**. This copies the audio to `~/Watsejy/audio/`, writes the corrected text to `~/Watsejy/transcripts/`, and appends a row to `~/Watsejy/corrections.jsonl` in the same shape as `data/test/manifest.jsonl`. When you have a few hours, that file is the benchmark test set, and later the fine-tuning data.
+When a transcript is corrected, pick the source at the bottom of the editor (stemboodskap, vergadering in persoon, aanlyn vergadering, voorgelees), tick the code-switching box if there is a lot of English, and press **Stoor na ~/Watsejy**. This copies the audio to `~/Watsejy/audio/`, writes the corrected text to `~/Watsejy/transcripts/`, and appends a row to `~/Watsejy/corrections.jsonl` in the same shape as `data/test/manifest.jsonl`. Uploads sit in `~/Watsejy/uploads/` and can be deleted at any time. When you have a few hours of corrections, that file is the benchmark test set, and later the fine-tuning data.
 
 Add `consent_id` to rows for recordings of other people once their forms are signed.
 

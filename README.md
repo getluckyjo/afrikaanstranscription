@@ -11,7 +11,7 @@ The personal MVP lives in `app/`: a command-line transcriber and a local drag-an
 ```bash
 python app/watsejy.py voicenote.opus            # transcript next to the file
 python app/watsejy.py meeting.m4a --speakers    # with speaker labels
-python app/ui.py                                # drag-and-drop page at http://127.0.0.1:7860
+python app/web.py                               # drop-and-fix editor at http://127.0.0.1:7861
 ```
 
 ## Layout
