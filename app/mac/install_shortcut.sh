@@ -28,22 +28,49 @@ EOF
 chmod +x "$TARGET"
 xattr -d com.apple.quarantine "$TARGET" 2>/dev/null || true
 
-# Give the launcher its icon (uses the AppKit bridge built into macOS; no extra tools).
+# Give the launcher its icon.
 ICON="$REPO/app/mac/watsejy-icon.png"
+set_icon_jxa() {
+  local js
+  js="$(mktemp -t watsejy-icon).js"
+  cat > "$js" <<'JXA'
+ObjC.import("AppKit");
+function run(argv) {
+  var img = $.NSImage.alloc.initWithContentsOfFile(argv[0]);
+  if (img.isNil()) throw new Error("could not load " + argv[0]);
+  var ok = $.NSWorkspace.sharedWorkspace.setIconForFileOptions(img, argv[1], 0);
+  if (!ok) throw new Error("setIcon returned false");
+  return "ok";
+}
+JXA
+  osascript -l JavaScript "$js" "$ICON" "$TARGET"
+  local rc=$?
+  rm -f "$js"
+  return $rc
+}
+set_icon_pyobjc() {
+  "$REPO/.venv/bin/python" -c "import Cocoa" 2>/dev/null || "$REPO/.venv/bin/pip" install -q pyobjc-framework-Cocoa
+  "$REPO/.venv/bin/python" - "$ICON" "$TARGET" <<'PY'
+import sys
+from Cocoa import NSImage, NSWorkspace
+img = NSImage.alloc().initWithContentsOfFile_(sys.argv[1])
+assert img is not None, "could not load icon"
+ok = NSWorkspace.sharedWorkspace().setIcon_forFile_options_(img, sys.argv[2], 0)
+assert ok, "setIcon returned false"
+print("ok")
+PY
+}
 if [ -f "$ICON" ]; then
-  if osascript -l JavaScript -e '
-    ObjC.import("AppKit");
-    var args = $.NSProcessInfo.processInfo.arguments;
-    var icon = ObjC.unwrap(args.objectAtIndex(args.count - 2));
-    var file = ObjC.unwrap(args.objectAtIndex(args.count - 1));
-    var img = $.NSImage.alloc.initWithContentsOfFile(icon);
-    var ok = $.NSWorkspace.sharedWorkspace.setIconForFileOptions(img, file, 0);
-    if (!ok) throw new Error("setIcon failed");
-  ' "$ICON" "$TARGET" >/dev/null 2>&1; then
+  if set_icon_jxa; then
     echo "Icon applied."
   else
-    echo "Could not apply the icon (the launcher still works)."
+    echo "First method failed; trying the Python method…"
+    if set_icon_pyobjc; then echo "Icon applied."; else echo "Could not apply the icon (the launcher still works)."; fi
   fi
+  touch "$TARGET"
+  osascript -e "tell application \"Finder\" to update (POSIX file \"$TARGET\" as alias)" >/dev/null 2>&1 || true
+else
+  echo "Icon file not found at $ICON (pull the latest main first)."
 fi
 echo "Created $TARGET"
 echo "Double-click 'Watsejy' on your Desktop to start. The first time, macOS may ask to allow Terminal access to Desktop or Documents; click OK."
