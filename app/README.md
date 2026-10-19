@@ -72,7 +72,7 @@ Once, from the project folder:
 bash app/mac/install_shortcut.sh
 ```
 
-That puts **Watsejy** on your Desktop. Double-click it to start: a small window opens, the browser opens on the editor, and closing the window stops it. If Watsejy is already running, the shortcut just opens the browser again.
+That builds a small **Watsejy** app on your Desktop with its own icon. Double-click it to start: a Terminal window opens with the server, the browser opens on the editor, and closing that window stops it. If Watsejy is already running, the shortcut just opens the browser again. Re-run the command after updates; it rebuilds the app in place. If the icon looks generic after the first build, run `killall Finder` once.
 
 ## 5. Build the test set while you work
 
