@@ -151,6 +151,7 @@ footer a { color: var(--accent); }
                   x("https://www.registry.net.za/", "ZACR (.co.za registry)"), x("https://www.cipc.co.za/", "CIPC trade marks"), x("https://inforegulator.org.za/", "Information Regulator"), x("https://popia.co.za/", "POPIA text")] },
         { n: 2, title: "Build the test set", blurb: "2–5 hours of consented audio that matches the real workload.",
           tasks: [
+            "Onboard Pietie Beyers as data lead with the brief; agree credit and compensation",
             "Collect 1–2 h of online meetings (system audio)",
             "Collect 1–2 h of in-person meetings (laptop or phone mic)",
             "Collect 0.5–1 h of WhatsApp voice notes",
@@ -159,7 +160,7 @@ footer a { color: var(--accent); }
             "Write data/test/manifest.jsonl and hold out 20% as eval",
             "Download AfriSwitch and FLEURS af_za for public comparison",
           ],
-          links: [r("data/README.md", "data/README.md"), r("data/test/manifest.example.jsonl", "manifest example"), x("https://arxiv.org/abs/2608.26434", "AfriSwitch paper"), x("https://huggingface.co/datasets/google/fleurs", "FLEURS dataset")] },
+          links: [r("docs/DATA_LEAD_BRIEF.md", "data lead brief"), r("data/README.md", "data/README.md"), r("data/test/manifest.example.jsonl", "manifest example"), r("legal/CONSENT_RECORDING.md", "consent form"), x("https://arxiv.org/abs/2608.26434", "AfriSwitch paper"), x("https://huggingface.co/datasets/google/fleurs", "FLEURS dataset")] },
         { n: 3, title: "Benchmark the candidate models", blurb: "GPU run, diarization and timing on three real laptops.",
           tasks: [
             "Rent a GPU (Vast.ai or RunPod) and install requirements.txt",
