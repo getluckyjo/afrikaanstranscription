@@ -1,0 +1,536 @@
+<title>Afrikaans Transcription Build</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,600&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column, phase bands stacked; each step is a row with a tick, title, blurb and link chips. */
+:root {
+  --bg: #f6f7f4;
+  --surface: #ffffff;
+  --fg: #1d2420;
+  --muted: #5e6a63;
+  --line: #d9ded9;
+  --accent: #1f6f5c;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2efea;
+  --done: #2a7d3f;
+  --warn: #9a6b12;
+  --display: "Literata", Georgia, "Times New Roman", serif;
+  --body: "Public Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141917; --surface: #1c2320; --fg: #e8ece9; --muted: #9aa69f; --line: #2d3733;
+    --accent: #5fb89c; --accent-ink: #0f1a16; --accent-soft: #1f302a; --done: #6cc47f; --warn: #d9a93c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141917; --surface: #1c2320; --fg: #e8ece9; --muted: #9aa69f; --line: #2d3733;
+  --accent: #5fb89c; --accent-ink: #0f1a16; --accent-soft: #1f302a; --done: #6cc47f; --warn: #d9a93c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 920px; margin: 0 auto; }
+header { padding-block: 28px 18px; display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-end; justify-content: space-between; }
+h1 { font-family: var(--display); font-weight: 600; font-size: 1.8rem; margin: 0 0 4px; letter-spacing: -0.01em; text-wrap: balance; }
+.sub { color: var(--muted); margin: 0; max-width: 60ch; }
+.overall { min-width: 220px; flex: 0 1 260px; }
+.overall .num { font-family: var(--display); font-size: 2.2rem; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.overall .lbl { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.bar { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 4px; transition: width .3s ease; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+.status { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+.status.warn { color: var(--warn); }
+
+nav.phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-block: 8px 28px; }
+nav.phases a {
+  display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px 12px;
+}
+nav.phases a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+nav.phases .t { font-weight: 600; font-size: 0.9rem; }
+nav.phases .w { color: var(--muted); font-size: 0.78rem; }
+nav.phases .bar { height: 5px; margin-top: 8px; }
+
+section.phase { margin-block: 0 34px; scroll-margin-top: 12px; }
+.phase-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; border-bottom: 2px solid var(--accent); padding-bottom: 6px; margin-bottom: 10px; }
+.phase-head h2 { font-family: var(--display); font-weight: 600; font-size: 1.3rem; margin: 0; }
+.phase-head .when { color: var(--muted); font-size: 0.85rem; }
+.phase-head .count { margin-left: auto; color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+
+.step { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); margin-bottom: 10px; }
+.step > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; padding: 12px 14px; }
+.step > summary::-webkit-details-marker { display: none; }
+.step > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
+.step .n { font-family: var(--display); font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 2ch; padding-top: 2px; }
+.step .title { font-weight: 600; }
+.step .blurb { color: var(--muted); font-size: 0.9rem; margin-top: 2px; }
+.step .pct { font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; padding-top: 3px; }
+.step.complete .title { color: var(--done); }
+.step.complete .pct { color: var(--done); }
+.step .body { padding: 0 14px 14px 14px; border-top: 1px dashed var(--line); }
+.tasks { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.tasks li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; }
+.tasks label { cursor: pointer; }
+.tasks input[type="checkbox"] { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--accent); cursor: pointer; }
+.tasks input:disabled { cursor: not-allowed; }
+.tasks li.done label { text-decoration: line-through; color: var(--muted); }
+.tasks .at { font-size: 0.75rem; color: var(--muted); margin-left: 6px; }
+.links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.links a {
+  display: inline-block; font-size: 0.8rem; text-decoration: none; color: var(--accent); background: var(--accent-soft);
+  border-radius: 999px; padding: 3px 10px; border: 1px solid transparent;
+}
+.links a:hover, .links a:focus-visible { border-color: var(--accent); outline: none; }
+.links a.repo::before { content: "repo · "; color: var(--muted); }
+.note { font-size: 0.85rem; color: var(--muted); margin-top: 10px; }
+footer { color: var(--muted); font-size: 0.8rem; margin-top: 30px; border-top: 1px solid var(--line); padding-top: 12px; }
+footer a { color: var(--accent); }
+.reset { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 6px; padding: 4px 10px; font: inherit; font-size: 0.8rem; cursor: pointer; }
+.reset:focus-visible { outline: 2px solid var(--accent); }
+@media (max-width: 480px) {
+  .step > summary { grid-template-columns: auto 1fr; }
+  .step .pct { grid-column: 2; padding-top: 0; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Afrikaans Transcription Build</h1>
+      <p class="sub">Every step from the research to a shipped local-first app, with links to the files, services and docs each one needs. Tick things off as you go.</p>
+    </div>
+    <div class="overall">
+      <div class="lbl">Overall progress</div>
+      <div class="num" id="overall-num">0%</div>
+      <div class="bar"><i id="overall-bar"></i></div>
+      <div class="status" id="status">Loading saved progress…</div>
+    </div>
+  </header>
+
+  <nav class="phases" id="phase-nav"></nav>
+  <main id="phases"></main>
+
+  <footer>
+    Repository: <a href="https://github.com/getluckyjo/afrikaanstranscription" target="_blank" rel="noopener">getluckyjo/afrikaanstranscription</a> (links point at the <code>claude/admiring-clarke-yjoufz</code> branch).
+    Plan: <a href="https://github.com/getluckyjo/afrikaanstranscription/blob/claude/admiring-clarke-yjoufz/reports/Build%20steps.md" target="_blank" rel="noopener">Build steps</a> ·
+    Research: <a href="https://github.com/getluckyjo/afrikaanstranscription/blob/claude/admiring-clarke-yjoufz/reports/Afrikaans%20transcription%20tool%20feasibility.md" target="_blank" rel="noopener">Feasibility report</a>.
+    <span style="float:right"><button class="reset" id="reset" type="button">Clear all ticks</button></span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  const REPO = "https://github.com/getluckyjo/afrikaanstranscription/blob/claude/admiring-clarke-yjoufz/";
+  const r = (path, label) => ({ href: REPO + path, label: label || path, repo: true });
+  const x = (href, label) => ({ href, label });
+
+  const PHASES = [
+    {
+      id: "p0", title: "Phase 0 · Prove the model and get legal", when: "Weeks 1–4",
+      steps: [
+        { n: 1, title: "Legal basics", blurb: "Before any real audio is handled.",
+          tasks: [
+            "Decide the legal entity (individual, company or NPO)",
+            "Register an Information Officer with the Information Regulator",
+            "Finalise the privacy notice",
+            "Finalise the recording consent form and the content licence letter",
+            "Draft the PAIA manual from the Regulator's template",
+            "Set up the consent register (outside the repo)",
+          ],
+          links: [r("legal/CHECKLIST.md", "legal/CHECKLIST.md"), r("legal/PRIVACY_NOTICE_DRAFT.md", "privacy notice draft"), r("legal/CONSENT_RECORDING.md", "consent form"), r("legal/LICENCE_LETTER_CONTENT.md", "licence letter"), r("legal/PAIA_MANUAL_OUTLINE.md", "PAIA outline"),
+                  x("https://inforegulator.org.za/", "Information Regulator"), x("https://popia.co.za/", "POPIA text")] },
+        { n: 2, title: "Build the test set", blurb: "2–5 hours of consented audio that matches the real workload.",
+          tasks: [
+            "Collect 1–2 h of online meetings (system audio)",
+            "Collect 1–2 h of in-person meetings (laptop or phone mic)",
+            "Collect 0.5–1 h of WhatsApp voice notes",
+            "Get the Buitelyn licence letter signed and collect unscripted recordings",
+            "Transcribe everything by hand (one spelling convention)",
+            "Write data/test/manifest.jsonl and hold out 20% as eval",
+            "Download AfriSwitch and FLEURS af_za for public comparison",
+          ],
+          links: [r("data/README.md", "data/README.md"), r("data/test/manifest.example.jsonl", "manifest example"), x("https://arxiv.org/abs/2608.26434", "AfriSwitch paper"), x("https://huggingface.co/datasets/google/fleurs", "FLEURS dataset")] },
+        { n: 3, title: "Benchmark the candidate models", blurb: "GPU run, diarization and timing on three real laptops.",
+          tasks: [
+            "Rent a GPU (Vast.ai or RunPod) and install requirements.txt",
+            "Normalise audio with benchmark/normalize.py",
+            "Convert BuzzASR with benchmark/convert_to_ct2.sh",
+            "Accept gated models on Hugging Face (Sunbird, pyannote) and set HF_TOKEN",
+            "Run benchmark/run_all.py and score every model",
+            "Run diarization on meeting clips and record DER",
+            "Time fluister-turbo and fluister-medium on a MacBook, a mid-range Windows laptop and the cheapest expected laptop",
+            "Convert the winner to whisper.cpp GGML and time it with Metal",
+            "Record everything in docs/benchmarks.md and decide default and low-end model",
+          ],
+          links: [r("benchmark/README.md", "benchmark/README.md"), r("benchmark/models.yaml", "models.yaml"), r("docs/benchmarks.md", "docs/benchmarks.md"),
+                  x("https://huggingface.co/digiphyte/fluister-turbo", "Fluister turbo"), x("https://huggingface.co/BuzzASR/afrikaans", "BuzzASR"), x("https://huggingface.co/Sunbird/faster-whisper-51-african-languages", "Sunbird 51"), x("https://huggingface.co/pyannote/speaker-diarization-3.1", "pyannote 3.1"),
+                  x("https://vast.ai/pricing", "Vast.ai"), x("https://www.runpod.io/pricing", "RunPod"), x("https://github.com/ggml-org/whisper.cpp", "whisper.cpp")] },
+        { n: 4, title: "Clear data licences", blurb: "Needed before any fine-tuning on public corpora.",
+          tasks: [
+            "Email the afrikaans-30s author to confirm commercial use",
+            "Confirm NCHLT Speech II includes Afrikaans",
+            "Update legal/ATTRIBUTION.md with the outcome",
+          ],
+          links: [r("legal/ATTRIBUTION.md", "ATTRIBUTION.md"), x("https://huggingface.co/datasets/andreoosthuizen/afrikaans-30s", "afrikaans-30s"), x("https://repo.sadilar.org/", "SADiLaR repository")] },
+        { n: "4b", title: "Optional public demo", blurb: "Lets early users try the model while you build.",
+          tasks: ["Publish a Gradio Space on Hugging Face ZeroGPU with the chosen model"],
+          links: [x("https://huggingface.co/spaces", "Hugging Face Spaces")] },
+      ],
+    },
+    {
+      id: "p1", title: "Phase 1 · Desktop app MVP", when: "Months 2–4",
+      steps: [
+        { n: 5, title: "Choose the stack", blurb: "Tauri 2 shell, whisper.cpp in-process, native or sidecar diarization.",
+          tasks: [
+            "Decide Tauri 2 vs Electron",
+            "Decide whisper-rs in-process vs faster-whisper sidecar",
+            "Decide sherpa-onnx (native) vs pyannote sidecar for diarization and validate the choice",
+            "Set up model download on first run (turbo default, medium for low-end)",
+          ],
+          links: [x("https://tauri.app/", "Tauri"), x("https://github.com/tazz4843/whisper-rs", "whisper-rs"), x("https://github.com/k2-fsa/sherpa-onnx", "sherpa-onnx"), x("https://github.com/SYSTRAN/faster-whisper", "faster-whisper")] },
+        { n: 6, title: "Audio capture", blurb: "Mic plus system audio as two separate 16 kHz streams.",
+          tasks: [
+            "Microphone capture with cpal on all platforms",
+            "macOS system audio via ScreenCaptureKit or Core Audio taps, with permission prompt",
+            "Windows system audio via WASAPI loopback",
+            "Write both streams to disk continuously; test a 3-hour recording for drift and memory",
+          ],
+          links: [x("https://crates.io/crates/cpal", "cpal"), x("https://developer.apple.com/documentation/screencapturekit", "ScreenCaptureKit"), x("https://learn.microsoft.com/en-us/windows/win32/coreaudio/loopback-recording", "WASAPI loopback")] },
+        { n: 7, title: "Transcription pipeline", blurb: "Forced Afrikaans, VAD, chunking, speaker assignment, merged timeline.",
+          tasks: [
+            "Run whisper.cpp per stream with language=af, VAD and beam size 5",
+            "Chunk long recordings at silence boundaries (~10 min)",
+            "Diarize the system stream (online) or mic stream (in-person) and assign speakers by overlap",
+            "Merge streams into one timeline with “Me” pre-labelled",
+            "Measure end-to-end time on the Step 3 laptops; add medium-model or cloud fallback where under 2x real time",
+          ],
+          links: [r("benchmark/transcribe.py", "transcribe.py (reference logic)")] },
+        { n: 8, title: "“Who is who” review screen", blurb: "Name, merge and split speakers, then edit and export.",
+          tasks: [
+            "Speaker cards with three audio snippets and first lines",
+            "Rename, merge and split speakers",
+            "Remember names per meeting title",
+            "Editable transcript with timestamps, click-to-play, find-and-replace and glossary",
+            "Export to .txt, .docx, .srt and clipboard",
+          ],
+          links: [] },
+        { n: 9, title: "First run, consent and settings", blurb: "Local-first by default; cloud and donation are separate opt-ins.",
+          tasks: [
+            "First-run flow: language, privacy notice, consent, model download",
+            "Settings: model size, storage folder, auto-delete after N days, cloud fallback (off), data donation (off)",
+            "Per-meeting data donation choice that uploads audio and corrected transcript",
+          ],
+          links: [r("legal/PRIVACY_NOTICE_DRAFT.md", "privacy notice draft")] },
+        { n: 10, title: "Packaging, signing and updates", blurb: "Notarised Mac build, signed Windows build, auto-update.",
+          tasks: [
+            "Join the Apple Developer Program and notarise the Mac build",
+            "Get a Windows code-signing certificate or Azure Trusted Signing",
+            "Set up Tauri updater with signed manifests",
+            "Crash reporting without audio or transcript content",
+          ],
+          links: [x("https://developer.apple.com/programs/", "Apple Developer Program"), x("https://learn.microsoft.com/en-us/azure/trusted-signing/", "Azure Trusted Signing"), x("https://tauri.app/plugin/updater/", "Tauri updater")] },
+        { n: 11, title: "Soft launch", blurb: "Two or three groups with regular Afrikaans meetings.",
+          tasks: [
+            "Recruit beta groups (church council, school body, small practice)",
+            "Track correction rate and speaker merge rate",
+            "Track model download completion, processing time and crash rate per platform",
+          ],
+          links: [] },
+      ],
+    },
+    {
+      id: "p2", title: "Phase 2 · Mobile, web upload, cloud fallback, fine-tune", when: "Months 5–8",
+      steps: [
+        { n: 12, title: "Cloud worker", blurb: "Only for fallback, web upload and bots.",
+          tasks: [
+            "Docker image with ffmpeg, faster-whisper and the model baked in",
+            "Deploy on RunPod Serverless or Modal",
+            "R2 bucket with 2-day lifecycle rule and hourly deletion job",
+            "Desktop cloud-fallback path that reuses the review screen",
+          ],
+          links: [x("https://www.runpod.io/serverless", "RunPod Serverless"), x("https://modal.com/pricing", "Modal"), x("https://developers.cloudflare.com/r2/", "Cloudflare R2")] },
+        { n: 13, title: "Web upload page", blurb: "Drag-and-drop any audio, Android share target for WhatsApp voice notes.",
+          tasks: [
+            "Next.js PWA with Supabase auth and resumable uploads to R2",
+            "Register as an Android share target",
+            "iOS guide: save voice note to Files, then upload",
+            "Export instructions for Zoom, Google Meet and Teams recordings",
+            "Per-user monthly cap on free cloud minutes",
+          ],
+          links: [x("https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/share_target", "Web Share Target"), x("https://supabase.com/", "Supabase"), x("https://vercel.com/", "Vercel")] },
+        { n: 14, title: "Mobile app for in-person meetings", blurb: "On-device on recent phones, cloud fallback on older ones.",
+          tasks: [
+            "iOS app with WhisperKit and the Fluister Core ML build, background audio mode",
+            "Android app with whisper.cpp via JNI and a foreground service",
+            "Share sheet / share target for WhatsApp voice notes",
+            "Sync transcripts (not audio) with desktop via Supabase",
+          ],
+          links: [x("https://github.com/argmaxinc/WhisperKit", "WhisperKit"), x("https://huggingface.co/digiphyte/fluister-turbo-mlx", "Fluister MLX / Core ML")] },
+        { n: 15, title: "Second-stage fine-tune", blurb: "LoRA on donated data; ship only if WER improves.",
+          tasks: [
+            "Assemble donated and corrected audio plus NCHLT, afrikaans-30s and FLEURS",
+            "Run LoRA fine-tune on a 24 GB GPU (transformers + peft)",
+            "Evaluate against Step 3 numbers on meeting and code-switched subsets",
+            "Convert to GGML, Core ML and CTranslate2 and ship via the model updater",
+          ],
+          links: [x("https://huggingface.co/blog/fine-tune-whisper", "HF fine-tune Whisper guide"), x("https://huggingface.co/docs/peft", "peft")] },
+        { n: 16, title: "Freemium and payments", blurb: "Free local tier, paid cloud and team features in rand.",
+          tasks: [
+            "Define the free tier cap",
+            "Paid tier billed through Paystack or Yoco",
+            "Business tier with data-processing agreement",
+          ],
+          links: [x("https://paystack.com/za", "Paystack"), x("https://www.yoco.com/za/", "Yoco")] },
+      ],
+    },
+    {
+      id: "p3", title: "Phase 3 · WhatsApp bot, B2B and scale", when: "Months 9–12",
+      steps: [
+        { n: 17, title: "WhatsApp Cloud API bot (optional)", blurb: "Direct to Meta, reply-only, capped per user.",
+          tasks: [
+            "Prototype on Meta's test number with the audio webhook",
+            "Business Portfolio, own number, display-name review, payment method",
+            "Per-user cap so replies stay near the 1,000 free messages",
+            "Review Meta's AI Providers policy and keep the bot narrow",
+          ],
+          links: [x("https://developers.facebook.com/docs/whatsapp/cloud-api/get-started", "Cloud API get started"), x("https://developers.facebook.com/docs/whatsapp/pricing", "WhatsApp pricing")] },
+        { n: 18, title: "Dedicated GPU and in-country hosting", blurb: "When sustained volume passes ~5,000 audio hours a month.",
+          tasks: [
+            "Move cloud fallback to one always-on GPU with a queue",
+            "Price South African GPU hosting for in-country processing",
+          ],
+          links: [x("https://www.hetzner.com/dedicated-rootserver/matrix-gpu/", "Hetzner GPU servers")] },
+        { n: 19, title: "B2B features", blurb: "Churches, legal, call centres, municipalities, schools.",
+          tasks: [
+            "Team workspaces and shared glossaries",
+            "Admin-controlled local-only policy and audit log",
+            "Bulk upload and signed data-processing agreement",
+          ],
+          links: [] },
+        { n: 20, title: "Later options", blurb: "Only with customer pull.",
+          tasks: [
+            "Live captions overlay from the rolling windows",
+            "Local or consented cloud summaries",
+            "Self-hosted Vexa meeting bot",
+            "isiZulu and isiXhosa expansion",
+          ],
+          links: [x("https://github.com/Vexa-ai/vexa", "Vexa")] },
+      ],
+    },
+  ];
+
+  // ---- state ----
+  let done = {};           // taskId -> ISO date
+  let canWrite = true;
+  let docRef = null;
+  let writeChain = Promise.resolve();
+  const statusEl = document.getElementById("status");
+
+  const taskId = (step, i) => "s" + step.n + "-" + i;
+  const allTaskIds = () => PHASES.flatMap(p => p.steps.flatMap(s => s.tasks.map((_, i) => taskId(s, i))));
+
+  function setStatus(text, warn) {
+    statusEl.textContent = text;
+    statusEl.classList.toggle("warn", !!warn);
+  }
+
+  function fmtDate(iso) {
+    try { return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" }); } catch (e) { return ""; }
+  }
+
+  // ---- render ----
+  function build() {
+    const nav = document.getElementById("phase-nav");
+    const main = document.getElementById("phases");
+    nav.innerHTML = ""; main.innerHTML = "";
+    for (const p of PHASES) {
+      const a = document.createElement("a");
+      a.href = "#" + p.id;
+      a.innerHTML = '<div class="t"></div><div class="w"></div><div class="bar"><i></i></div>';
+      a.querySelector(".t").textContent = p.title.replace(" · ", ": ");
+      a.querySelector(".w").textContent = p.when;
+      a.dataset.phase = p.id;
+      nav.appendChild(a);
+
+      const sec = document.createElement("section");
+      sec.className = "phase"; sec.id = p.id;
+      const head = document.createElement("div");
+      head.className = "phase-head";
+      head.innerHTML = '<h2></h2><span class="when"></span><span class="count"></span>';
+      head.querySelector("h2").textContent = p.title;
+      head.querySelector(".when").textContent = p.when;
+      sec.appendChild(head);
+
+      for (const s of p.steps) {
+        const det = document.createElement("details");
+        det.className = "step"; det.dataset.step = String(s.n);
+        const sum = document.createElement("summary");
+        sum.innerHTML = '<span class="n"></span><span><div class="title"></div><div class="blurb"></div></span><span class="pct"></span>';
+        sum.querySelector(".n").textContent = s.n;
+        sum.querySelector(".title").textContent = s.title;
+        sum.querySelector(".blurb").textContent = s.blurb;
+        det.appendChild(sum);
+
+        const body = document.createElement("div");
+        body.className = "body";
+        const ul = document.createElement("ul");
+        ul.className = "tasks";
+        s.tasks.forEach((t, i) => {
+          const id = taskId(s, i);
+          const li = document.createElement("li");
+          li.dataset.task = id;
+          const cb = document.createElement("input");
+          cb.type = "checkbox"; cb.id = "cb-" + id;
+          cb.addEventListener("change", () => toggle(id, cb.checked));
+          const label = document.createElement("label");
+          label.htmlFor = cb.id; label.textContent = t;
+          const at = document.createElement("span");
+          at.className = "at";
+          label.appendChild(at);
+          li.appendChild(cb); li.appendChild(label);
+          ul.appendChild(li);
+        });
+        body.appendChild(ul);
+        if (s.links && s.links.length) {
+          const links = document.createElement("div");
+          links.className = "links";
+          for (const l of s.links) {
+            const a = document.createElement("a");
+            a.href = l.href; a.target = "_blank"; a.rel = "noopener";
+            a.textContent = l.label;
+            if (l.repo) a.classList.add("repo");
+            links.appendChild(a);
+          }
+          body.appendChild(links);
+        }
+        det.appendChild(body);
+        sec.appendChild(det);
+      }
+      main.appendChild(sec);
+    }
+    // open the first phase that still has work
+    refresh();
+    const firstOpen = PHASES.find(p => p.steps.some(s => s.tasks.some((_, i) => !done[taskId(s, i)])));
+    if (firstOpen) {
+      const s = firstOpen.steps.find(st => st.tasks.some((_, i) => !done[taskId(st, i)]));
+      if (s) document.querySelector('details[data-step="' + s.n + '"]').open = true;
+    }
+  }
+
+  function refresh() {
+    const ids = allTaskIds();
+    const total = ids.length;
+    const n = ids.filter(id => done[id]).length;
+    const pct = total ? Math.round(100 * n / total) : 0;
+    document.getElementById("overall-num").textContent = pct + "%";
+    document.getElementById("overall-bar").style.width = pct + "%";
+
+    for (const p of PHASES) {
+      let pt = 0, pd = 0;
+      for (const s of p.steps) {
+        const det = document.querySelector('details[data-step="' + s.n + '"]');
+        let st = s.tasks.length, sd = 0;
+        s.tasks.forEach((_, i) => {
+          const id = taskId(s, i);
+          const isDone = !!done[id];
+          if (isDone) sd++;
+          const li = det.querySelector('li[data-task="' + id + '"]');
+          const cb = li.querySelector("input");
+          cb.checked = isDone; cb.disabled = !canWrite;
+          li.classList.toggle("done", isDone);
+          li.querySelector(".at").textContent = isDone ? fmtDate(done[id]) : "";
+        });
+        pt += st; pd += sd;
+        det.classList.toggle("complete", sd === st);
+        det.querySelector(".pct").textContent = sd + " / " + st;
+      }
+      const ppct = pt ? Math.round(100 * pd / pt) : 0;
+      document.querySelector('#' + p.id + ' .count').textContent = pd + " of " + pt + " tasks";
+      const navA = document.querySelector('nav.phases a[data-phase="' + p.id + '"]');
+      navA.querySelector(".bar > i").style.width = ppct + "%";
+    }
+  }
+
+  // ---- persistence ----
+  function saveLocal() {
+    try { localStorage.setItem("afr-build-progress", JSON.stringify(done)); } catch (e) {}
+  }
+  function loadLocal() {
+    try {
+      const raw = localStorage.getItem("afr-build-progress");
+      if (raw) { const v = JSON.parse(raw); if (v && typeof v === "object") done = v; }
+    } catch (e) {}
+  }
+
+  function persistRemote() {
+    if (!docRef) return;
+    const snapshot = Object.assign({}, done);
+    writeChain = writeChain
+      .then(() => docRef.set({ done: snapshot, updatedAt: new Date().toISOString() }))
+      .then(() => setStatus("Saved. Synced across your devices."))
+      .catch(e => {
+        if (e && e.code === "invalid_argument") { canWrite = false; refresh(); setStatus("You can view this checklist but not change it.", true); }
+        else setStatus("Could not save (" + (e && e.code ? e.code : "error") + "). Kept in this browser.", true);
+      });
+  }
+
+  function toggle(id, checked) {
+    if (!canWrite) return;
+    if (checked) done[id] = new Date().toISOString(); else delete done[id];
+    saveLocal();
+    refresh();
+    persistRemote();
+  }
+
+  document.getElementById("reset").addEventListener("click", () => {
+    if (!canWrite) return;
+    const btn = document.getElementById("reset");
+    if (btn.dataset.armed !== "1") { btn.dataset.armed = "1"; btn.textContent = "Click again to clear everything"; setTimeout(() => { btn.dataset.armed = "0"; btn.textContent = "Clear all ticks"; }, 4000); return; }
+    btn.dataset.armed = "0"; btn.textContent = "Clear all ticks";
+    done = {}; saveLocal(); refresh(); persistRemote();
+  });
+
+  // ---- boot ----
+  loadLocal();
+  build();
+  setStatus("Saved in this browser.");
+
+  (async () => {
+    const hasClaude = typeof window.claude === "object" && window.claude && typeof window.claude.use === "function";
+    if (!hasClaude) return;
+    const db = await window.claude.use("db");
+    if (!db) { setStatus("Saved in this browser only (sign in on claude.ai to sync).", true); return; }
+    try {
+      const user = await window.claude.use("user");
+      if (user) { const w = await user.can("data.write"); if (w === false) { canWrite = false; refresh(); } }
+    } catch (e) {}
+    docRef = db.doc("progress/steps");
+    let first = true;
+    docRef.onSnapshot(snap => {
+      if (snap.exists) {
+        const d = snap.data();
+        done = Object.assign({}, (d && d.done) || {});
+        saveLocal();
+        refresh();
+        setStatus(canWrite ? "Synced across your devices." : "You can view this checklist but not change it.", !canWrite);
+      } else if (first && Object.keys(done).length) {
+        // Nothing saved yet but this browser has ticks: push them up once.
+        persistRemote();
+      } else {
+        setStatus(canWrite ? "Synced across your devices." : "You can view this checklist but not change it.", !canWrite);
+      }
+      first = false;
+    }, err => {
+      setStatus("Live sync unavailable; kept in this browser.", true);
+    });
+  })();
+})();
+</script>
