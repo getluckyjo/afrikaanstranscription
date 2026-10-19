@@ -119,16 +119,16 @@ footer a { color: var(--accent); }
   <main id="phases"></main>
 
   <footer>
-    Repository: <a href="https://github.com/getluckyjo/afrikaanstranscription" target="_blank" rel="noopener">getluckyjo/afrikaanstranscription</a> (links point at the <code>claude/admiring-clarke-yjoufz</code> branch).
-    Plan: <a href="https://github.com/getluckyjo/afrikaanstranscription/blob/claude/admiring-clarke-yjoufz/reports/Build%20steps.md" target="_blank" rel="noopener">Build steps</a> ·
-    Research: <a href="https://github.com/getluckyjo/afrikaanstranscription/blob/claude/admiring-clarke-yjoufz/reports/Afrikaans%20transcription%20tool%20feasibility.md" target="_blank" rel="noopener">Feasibility report</a>.
+    Repository: <a href="https://github.com/getluckyjo/afrikaanstranscription" target="_blank" rel="noopener">getluckyjo/afrikaanstranscription</a> (links point at the <code>main</code> branch).
+    Plan: <a href="https://github.com/getluckyjo/afrikaanstranscription/blob/main/reports/Build%20steps.md" target="_blank" rel="noopener">Build steps</a> ·
+    Research: <a href="https://github.com/getluckyjo/afrikaanstranscription/blob/main/reports/Afrikaans%20transcription%20tool%20feasibility.md" target="_blank" rel="noopener">Feasibility report</a>.
     <span style="float:right"><button class="reset" id="reset" type="button">Clear all ticks</button></span>
   </footer>
 </div>
 
 <script>
 (function () {
-  const REPO = "https://github.com/getluckyjo/afrikaanstranscription/blob/claude/admiring-clarke-yjoufz/";
+  const REPO = "https://github.com/getluckyjo/afrikaanstranscription/blob/main/";
   const r = (path, label) => ({ href: REPO + path, label: label || path, repo: true });
   const x = (href, label) => ({ href, label });
 
