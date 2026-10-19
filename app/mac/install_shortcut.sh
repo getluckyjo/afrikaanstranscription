@@ -27,5 +27,23 @@ EOF
 
 chmod +x "$TARGET"
 xattr -d com.apple.quarantine "$TARGET" 2>/dev/null || true
+
+# Give the launcher its icon (uses the AppKit bridge built into macOS; no extra tools).
+ICON="$REPO/app/mac/watsejy-icon.png"
+if [ -f "$ICON" ]; then
+  if osascript -l JavaScript -e '
+    ObjC.import("AppKit");
+    var args = $.NSProcessInfo.processInfo.arguments;
+    var icon = ObjC.unwrap(args.objectAtIndex(args.count - 2));
+    var file = ObjC.unwrap(args.objectAtIndex(args.count - 1));
+    var img = $.NSImage.alloc.initWithContentsOfFile(icon);
+    var ok = $.NSWorkspace.sharedWorkspace.setIconForFileOptions(img, file, 0);
+    if (!ok) throw new Error("setIcon failed");
+  ' "$ICON" "$TARGET" >/dev/null 2>&1; then
+    echo "Icon applied."
+  else
+    echo "Could not apply the icon (the launcher still works)."
+  fi
+fi
 echo "Created $TARGET"
 echo "Double-click 'Watsejy' on your Desktop to start. The first time, macOS may ask to allow Terminal access to Desktop or Documents; click OK."
