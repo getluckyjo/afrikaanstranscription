@@ -7,52 +7,69 @@
 <style>
 :root {
   --bg: #f6f7f4; --surface: #fff; --fg: #1d2420; --muted: #5e6a63; --line: #d9ded9;
-  --accent: #1f6f5c; --accent-ink: #fff; --accent-soft: #e2efea; --active: #fff6d6; --warn: #9a6b12; --err: #a33a2a;
+  --accent: #1f6f5c; --accent-ink: #fff; --accent-soft: #e2efea; --active: #fff6d6; --done: #2a7d3f; --warn: #9a6b12; --err: #a33a2a;
 }
 @media (prefers-color-scheme: dark) {
   :root { --bg: #141917; --surface: #1c2320; --fg: #e8ece9; --muted: #9aa69f; --line: #2d3733;
-          --accent: #5fb89c; --accent-ink: #0f1a16; --accent-soft: #1f302a; --active: #3a3418; --warn: #d9a93c; --err: #e07b6b; }
+          --accent: #5fb89c; --accent-ink: #0f1a16; --accent-soft: #1f302a; --active: #3a3418; --done: #6cc47f; --warn: #d9a93c; --err: #e07b6b; }
 }
 * { box-sizing: border-box; }
+html { scroll-padding-top: 140px; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; }
-.wrap { max-width: 980px; margin: 0 auto; padding: 20px 16px 80px; }
+.wrap { max-width: 1000px; margin: 0 auto; padding: 20px 16px 120px; }
 h1 { font-size: 1.5rem; margin: 0; }
 h1 small { font-weight: 400; color: var(--muted); font-size: 0.95rem; margin-left: 8px; }
 header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
 #info { color: var(--muted); font-size: 0.85rem; }
 
-#drop { border: 2px dashed var(--line); border-radius: 12px; background: var(--surface); padding: 36px 20px; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; }
+#drop { border: 2px dashed var(--line); border-radius: 12px; background: var(--surface); padding: 32px 20px; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; }
 #drop.over { border-color: var(--accent); background: var(--accent-soft); }
 #drop strong { display: block; font-size: 1.1rem; margin-bottom: 4px; }
 #drop span { color: var(--muted); font-size: 0.9rem; }
+#drop.compact { padding: 12px 16px; }
+#drop.compact strong { font-size: 0.95rem; display: inline; margin-right: 8px; }
 #file { display: none; }
-.opts { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; margin: 12px 0 0; color: var(--muted); font-size: 0.9rem; }
+.opts { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; margin: 10px 0 0; color: var(--muted); font-size: 0.9rem; }
 .opts input[type=number] { width: 60px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); }
 
 #status { margin: 14px 0; padding: 10px 14px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); font-size: 0.9rem; }
 #status.err { border-color: var(--err); color: var(--err); }
 #status[hidden] { display: none; }
-
 #editor[hidden] { display: none; }
-.player { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0 8px; border-bottom: 1px solid var(--line); margin-bottom: 10px; }
-.player .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-audio { flex: 1 1 320px; min-width: 240px; }
-button { font: inherit; font-size: 0.88rem; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+
+.player { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0 8px; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+.player .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+audio { flex: 1 1 300px; min-width: 220px; height: 40px; }
+button { font: inherit; font-size: 0.88rem; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; white-space: nowrap; }
 button:hover { border-color: var(--accent); }
 button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+button.on { background: var(--accent-soft); border-color: var(--accent); }
 button:disabled { opacity: .5; cursor: default; }
 select { font: inherit; font-size: 0.88rem; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
-.hint { color: var(--muted); font-size: 0.8rem; margin-top: 6px; }
-kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+.meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 6px; color: var(--muted); font-size: 0.82rem; }
+.meta .prog { font-variant-numeric: tabular-nums; }
+.meta .prog b { color: var(--done); }
+.meta .dirty { color: var(--warn); }
+.meta .draft { color: var(--accent); }
+kbd { font: 0.76rem ui-monospace, Menlo, monospace; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+details.help { margin-top: 4px; font-size: 0.82rem; color: var(--muted); }
+details.help summary { cursor: pointer; }
+details.help ul { margin: 6px 0 0; padding-left: 18px; }
 
-.seg { display: grid; grid-template-columns: 64px 120px 1fr; gap: 8px; align-items: start; padding: 6px 8px; border-radius: 8px; border: 1px solid transparent; }
+.seg { display: grid; grid-template-columns: 26px 58px 112px 1fr auto; gap: 8px; align-items: start; padding: 5px 8px; border-radius: 8px; border: 1px solid transparent; }
 .seg.active { background: var(--active); border-color: var(--line); }
-.seg .t { font: 0.8rem ui-monospace, Menlo, monospace; color: var(--accent); background: none; border: none; padding: 6px 0; cursor: pointer; text-align: left; }
+.seg.done { opacity: .72; }
+.seg.done.active { opacity: 1; }
+.seg input.chk { width: 16px; height: 16px; margin: 9px 0 0 4px; accent-color: var(--done); cursor: pointer; }
+.seg .t { font: 0.8rem ui-monospace, Menlo, monospace; color: var(--accent); background: none; border: none; padding: 7px 0 0; cursor: pointer; text-align: left; white-space: nowrap; }
 .seg .t:hover { text-decoration: underline; }
-.seg input.spk { font: inherit; font-size: 0.85rem; padding: 5px 7px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); min-width: 0; }
-.seg textarea { font: inherit; width: 100%; resize: none; overflow: hidden; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); line-height: 1.45; }
+.seg input.spk { font: inherit; font-size: 0.85rem; padding: 6px 7px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); min-width: 0; width: 100%; }
+.seg textarea { font: inherit; font-size: 1rem; width: 100%; resize: none; overflow: hidden; padding: 6px 9px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); line-height: 1.5; min-height: 36px; }
 .seg textarea:focus { outline: 2px solid var(--accent); border-color: transparent; }
-.seg.nospk { grid-template-columns: 64px 1fr; }
+.seg .acts { display: flex; gap: 4px; opacity: 0; transition: opacity .1s; padding-top: 3px; }
+.seg:hover .acts, .seg.active .acts { opacity: 1; }
+.seg .acts button { padding: 4px 8px; font-size: 0.78rem; }
+.seg.nospk { grid-template-columns: 26px 58px 1fr auto; }
 .seg.nospk input.spk { display: none; }
 
 .tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 14px 0; }
@@ -61,8 +78,13 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
 .card .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .card input[type=text] { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); }
 .msg { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
-.msg.ok { color: var(--accent); }
-@media (max-width: 560px) { .seg { grid-template-columns: 56px 1fr; } .seg input.spk { grid-column: 2; } .seg textarea { grid-column: 1 / -1; } }
+.msg.ok { color: var(--done); }
+@media (max-width: 640px) {
+  .seg, .seg.nospk { grid-template-columns: 26px 58px 1fr; }
+  .seg input.spk { grid-column: 3; }
+  .seg textarea { grid-column: 1 / -1; }
+  .seg .acts { grid-column: 1 / -1; opacity: 1; }
+}
 </style>
 </head>
 <body>
@@ -77,7 +99,7 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
     <span>of klik om te kies · opus, m4a, mp3, wav, mp4 · Afrikaans</span>
     <input type="file" id="file" accept="audio/*,video/*,.opus,.ogg,.m4a,.mp3,.wav,.mp4,.webm,.aac,.flac">
   </div>
-  <div class="opts">
+  <div class="opts" id="opts">
     <label><input type="checkbox" id="speakers"> Benoem sprekers (vergaderings)</label>
     <label>Aantal sprekers <input type="number" id="nspk" min="0" max="20" value="0"> (0 = outomaties)</label>
   </div>
@@ -88,14 +110,29 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
     <div class="player">
       <div class="row">
         <audio id="audio" controls preload="auto"></audio>
-        <button id="playseg" title="Speel die gekose reël">▶ Reël</button>
-        <button id="back3" title="3 sekondes terug">↺ 3s</button>
+        <button id="playseg" title="Speel die gekose reël (⌘Enter)">▶ Reël</button>
+        <button id="loop" title="Herhaal die gekose reël">⟳ Herhaal</button>
+        <button id="back3" title="3 sekondes terug (⌘←)">↺ 3s</button>
         <select id="rate" title="Spoed">
-          <option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option>
+          <option value="0.7">0.7×</option><option value="0.85">0.85×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option>
         </select>
-        <span id="fname" style="color:var(--muted);font-size:.85rem"></span>
+        <button id="autoplay" class="on" title="Speel 'n reël sodra jy daarin klik">Speel by kies</button>
+        <button id="follow" class="on" title="Rol saam met die oudio">Volg oudio</button>
       </div>
-      <div class="hint">Klik 'n tyd om daar te speel. <kbd>Esc</kbd> speel/stop · <kbd>⌘</kbd>+<kbd>↓</kbd>/<kbd>↑</kbd> volgende/vorige reël · <kbd>⌘</kbd>+<kbd>←</kbd> 3s terug · <kbd>⌘</kbd>+<kbd>Enter</kbd> speel reël</div>
+      <div class="meta">
+        <span id="fname"></span>
+        <span class="prog" id="prog"></span>
+        <span id="dirty"></span>
+      </div>
+      <details class="help">
+        <summary>Sleutels en wenke</summary>
+        <ul>
+          <li><kbd>Enter</kbd> klaar met reël → volgende reël (en speel). <kbd>Shift</kbd>+<kbd>Enter</kbd> verdeel die reël by die wyser.</li>
+          <li><kbd>Esc</kbd> speel/stop · <kbd>⌘</kbd>+<kbd>↓</kbd>/<kbd>↑</kbd> volgende/vorige reël · <kbd>⌘</kbd>+<kbd>←</kbd> 3s terug · <kbd>⌘</kbd>+<kbd>Enter</kbd> speel reël weer.</li>
+          <li><kbd>⌘</kbd>+<kbd>D</kbd> merk reël as nagegaan · <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> voeg saam met volgende reël.</li>
+          <li>Klik 'n tyd om daar te speel. Jou werk word outomaties as konsep in hierdie blaaier bewaar; <b>Stoor</b> onder skryf dit na ~/Watsejy.</li>
+        </ul>
+      </details>
     </div>
 
     <div id="segs"></div>
@@ -105,6 +142,7 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
       <button id="dl-md">Aflaai .md</button>
       <button id="dl-srt">Aflaai .srt</button>
       <button id="copy">Kopieer teks</button>
+      <button id="markall">Merk alles nagegaan</button>
     </div>
 
     <div class="card" id="rename-card">
@@ -135,13 +173,14 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
   const $ = id => document.getElementById(id);
   const drop = $("drop"), fileIn = $("file"), status = $("status"), editor = $("editor");
   const audio = $("audio"), segsEl = $("segs");
-  let job = null, segs = [], activeIdx = -1, hasSpeakers = false;
+  let job = null, segs = [], activeIdx = -1, hasSpeakers = false, dirty = false, loopSeg = false, autoplay = true, follow = true;
+  let draftTimer = null;
 
   fetch("/api/info").then(r => r.json()).then(i => {
     $("info").textContent = `Alles bly op hierdie rekenaar · enjin: ${i.engine}` + (i.speakers_available ? "" : " · sprekers: stel HF_TOKEN");
   }).catch(() => {});
 
-  // ---- upload ----
+  // ---------------- upload ----------------
   drop.addEventListener("click", () => fileIn.click());
   drop.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileIn.click(); } });
   ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
@@ -152,7 +191,8 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
   function setStatus(text, err) { status.hidden = false; status.textContent = text; status.classList.toggle("err", !!err); }
 
   async function start(file) {
-    editor.hidden = true; segsEl.innerHTML = ""; job = null; segs = [];
+    if (dirty && !window.confirm("Jy het ongestoorde veranderinge. Nuwe lêer laai en dié verloor?")) return;
+    editor.hidden = true; segsEl.innerHTML = ""; job = null; segs = []; dirty = false;
     setStatus(`Laai ${file.name} op…`);
     const fd = new FormData();
     fd.append("file", file);
@@ -178,18 +218,24 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
     } catch (e) { setStatus("Verbinding verbreek: " + e.message, true); }
   }
 
-  // ---- editor ----
+  // ---------------- editor ----------------
   function load(j) {
-    job = j; segs = j.transcript.segments.map(s => ({ ...s }));
+    job = j;
+    segs = j.transcript.segments.map(s => ({ start: s.start, end: s.end, speaker: s.speaker, text: s.text, done: false }));
+    const draft = loadDraft(j.id);
+    if (draft && draft.length) { segs = draft; dirty = true; }
     hasSpeakers = segs.some(s => s.speaker);
     $("fname").textContent = j.name;
     audio.src = `/api/jobs/${j.id}/audio`;
     audio.playbackRate = parseFloat($("rate").value);
     $("rename-card").hidden = !hasSpeakers;
+    drop.classList.add("compact");
+    editor.hidden = false;           // must be visible before measuring text boxes
     render();
-    editor.hidden = false;
-    if (segs.length) focusSeg(0, false);
+    updateMeta(draft ? "Konsep uit hierdie blaaier herstel." : "");
+    if (segs.length) focusSeg(firstOpen(), true, false);
   }
+  function firstOpen() { const i = segs.findIndex(s => !s.done); return i < 0 ? 0 : i; }
 
   function hms(sec) { sec = Math.max(0, Math.round(sec)); const m = Math.floor(sec / 60), s = sec % 60, h = Math.floor(m / 60); return (h ? h + ":" + String(m % 60).padStart(2, "0") : String(m).padStart(2, "0")) + ":" + String(s).padStart(2, "0"); }
 
@@ -197,52 +243,133 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
     segsEl.innerHTML = "";
     segs.forEach((s, i) => {
       const row = document.createElement("div");
-      row.className = "seg" + (hasSpeakers ? "" : " nospk"); row.dataset.i = i;
+      row.className = "seg" + (hasSpeakers ? "" : " nospk") + (s.done ? " done" : ""); row.dataset.i = i;
+
+      const chk = document.createElement("input"); chk.type = "checkbox"; chk.className = "chk"; chk.checked = !!s.done; chk.title = "Nagegaan (⌘D)";
+      chk.addEventListener("change", () => { s.done = chk.checked; row.classList.toggle("done", s.done); markDirty(); });
+
       const t = document.createElement("button"); t.className = "t"; t.type = "button"; t.textContent = hms(s.start); t.title = "Speel van hier af";
-      t.addEventListener("click", () => { seek(s.start); audio.play(); focusSeg(i, true); });
+      t.addEventListener("click", () => { focusSeg(i, true, false); seek(s.start); audio.play(); });
+
       const spk = document.createElement("input"); spk.className = "spk"; spk.value = s.speaker || ""; spk.placeholder = "spreker";
-      spk.addEventListener("input", () => { s.speaker = spk.value.trim() || null; });
-      const ta = document.createElement("textarea"); ta.rows = 1; ta.value = s.text;
-      ta.addEventListener("input", () => { s.text = ta.value; grow(ta); });
-      ta.addEventListener("focus", () => { activeIdx = i; highlight(); });
-      row.append(t, spk, ta);
+      spk.addEventListener("input", () => { s.speaker = spk.value.trim() || null; markDirty(); });
+
+      const ta = document.createElement("textarea"); ta.rows = 1; ta.value = s.text; ta.spellcheck = false;
+      ta.addEventListener("input", () => { s.text = ta.value; grow(ta); markDirty(); });
+      ta.addEventListener("focus", () => { onFocusSeg(i); });
+      ta.addEventListener("keydown", e => onTextKey(e, i, ta));
+
+      const acts = document.createElement("div"); acts.className = "acts";
+      const bSplit = document.createElement("button"); bSplit.type = "button"; bSplit.textContent = "✂"; bSplit.title = "Verdeel by wyser (Shift+Enter)";
+      bSplit.addEventListener("click", () => splitAt(i, ta.selectionStart));
+      const bMerge = document.createElement("button"); bMerge.type = "button"; bMerge.textContent = "⤓"; bMerge.title = "Voeg saam met volgende reël (⌘⇧M)";
+      bMerge.addEventListener("click", () => mergeNext(i));
+      acts.append(bSplit, bMerge);
+
+      row.append(chk, t, spk, ta, acts);
       segsEl.appendChild(row);
-      grow(ta);
     });
+    requestAnimationFrame(() => segsEl.querySelectorAll("textarea").forEach(grow));
+    highlight();
   }
-  function grow(ta) { ta.style.height = "auto"; ta.style.height = ta.scrollHeight + "px"; }
-  function highlight() { [...segsEl.children].forEach((el, i) => el.classList.toggle("active", i === activeIdx)); }
-  function focusSeg(i, scroll) {
-    if (i < 0 || i >= segs.length) return;
+  function grow(ta) { ta.style.height = "auto"; ta.style.height = Math.max(36, ta.scrollHeight) + "px"; }
+  window.addEventListener("resize", () => segsEl.querySelectorAll("textarea").forEach(grow));
+
+  function highlight() { [...segsEl.children].forEach((el, i) => el.classList.toggle("active", i === activeIdx)); updateMeta(); }
+  function rowTA(i) { return segsEl.children[i] && segsEl.children[i].querySelector("textarea"); }
+
+  // focusing a line: select it, optionally play it
+  let suppressAutoplay = false;
+  function onFocusSeg(i) {
+    const changed = i !== activeIdx;
     activeIdx = i; highlight();
-    const ta = segsEl.children[i].querySelector("textarea");
-    ta.focus({ preventScroll: !scroll });
+    if (autoplay && changed && !suppressAutoplay) { seek(segs[i].start); audio.play(); }
+  }
+  function focusSeg(i, scroll, play) {
+    if (i < 0 || i >= segs.length) return;
+    suppressAutoplay = !play;
+    const ta = rowTA(i);
+    ta.focus({ preventScroll: true });
+    ta.setSelectionRange(ta.value.length, ta.value.length);
+    suppressAutoplay = false;
     if (scroll) segsEl.children[i].scrollIntoView({ block: "center", behavior: "smooth" });
   }
   function seek(t) { audio.currentTime = Math.max(0, t); }
   function playSeg() { if (activeIdx < 0) return; seek(segs[activeIdx].start); audio.play(); }
 
-  // follow playback: highlight the line being played, without stealing focus from an edit
+  function onTextKey(e, i, ta) {
+    if (e.key === "Enter" && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      e.preventDefault();
+      if (e.shiftKey) { splitAt(i, ta.selectionStart); return; }
+      segs[i].done = true; segsEl.children[i].classList.add("done"); segsEl.children[i].querySelector(".chk").checked = true; markDirty();
+      if (i + 1 < segs.length) focusSeg(i + 1, true, true); else { audio.pause(); updateMeta("Laaste reël klaar."); }
+    }
+  }
+
+  // follow playback: highlight and scroll the line being played, without stealing focus from an edit
   audio.addEventListener("timeupdate", () => {
     const t = audio.currentTime;
+    if (loopSeg && activeIdx >= 0 && t >= segs[activeIdx].end + 0.1) { seek(segs[activeIdx].start); return; }
     const i = segs.findIndex(s => t >= s.start && t < s.end + 0.15);
-    if (i >= 0 && i !== activeIdx && document.activeElement.tagName !== "TEXTAREA") { activeIdx = i; highlight(); }
+    if (i >= 0 && i !== activeIdx) {
+      const editing = document.activeElement && document.activeElement.tagName === "TEXTAREA";
+      if (!editing) { activeIdx = i; highlight(); if (follow) segsEl.children[i].scrollIntoView({ block: "center", behavior: "smooth" }); }
+    }
   });
   $("rate").addEventListener("change", () => { audio.playbackRate = parseFloat($("rate").value); });
   $("playseg").addEventListener("click", playSeg);
   $("back3").addEventListener("click", () => { seek(audio.currentTime - 3); audio.play(); });
+  $("loop").addEventListener("click", () => { loopSeg = !loopSeg; $("loop").classList.toggle("on", loopSeg); if (loopSeg) playSeg(); });
+  $("autoplay").addEventListener("click", () => { autoplay = !autoplay; $("autoplay").classList.toggle("on", autoplay); });
+  $("follow").addEventListener("click", () => { follow = !follow; $("follow").classList.toggle("on", follow); });
 
   document.addEventListener("keydown", e => {
     if (editor.hidden) return;
     const mod = e.metaKey || e.ctrlKey;
     if (e.key === "Escape") { e.preventDefault(); audio.paused ? audio.play() : audio.pause(); }
-    else if (mod && e.key === "ArrowDown") { e.preventDefault(); focusSeg(activeIdx + 1, true); playSeg(); }
-    else if (mod && e.key === "ArrowUp") { e.preventDefault(); focusSeg(activeIdx - 1, true); playSeg(); }
+    else if (mod && e.key === "ArrowDown") { e.preventDefault(); focusSeg(activeIdx + 1, true, true); }
+    else if (mod && e.key === "ArrowUp") { e.preventDefault(); focusSeg(activeIdx - 1, true, true); }
     else if (mod && e.key === "ArrowLeft") { e.preventDefault(); seek(audio.currentTime - 3); audio.play(); }
     else if (mod && e.key === "Enter") { e.preventDefault(); playSeg(); }
+    else if (mod && (e.key === "d" || e.key === "D") && activeIdx >= 0) { e.preventDefault(); const s = segs[activeIdx]; s.done = !s.done; segsEl.children[activeIdx].classList.toggle("done", s.done); segsEl.children[activeIdx].querySelector(".chk").checked = s.done; markDirty(); }
+    else if (mod && e.shiftKey && (e.key === "m" || e.key === "M") && activeIdx >= 0) { e.preventDefault(); mergeNext(activeIdx); }
   });
 
-  // ---- rename speakers ----
+  // ---------------- split / merge ----------------
+  function splitAt(i, pos) {
+    const s = segs[i], text = s.text;
+    const a = text.slice(0, pos).trim(), b = text.slice(pos).trim();
+    if (!a || !b) return;
+    const frac = Math.min(0.95, Math.max(0.05, a.length / Math.max(1, text.trim().length)));
+    const mid = s.start + (s.end - s.start) * frac;
+    segs.splice(i, 1, { ...s, end: mid, text: a, done: false }, { ...s, start: mid, text: b, done: false });
+    render(); markDirty();
+    focusSeg(i + 1, false, false);
+    const ta = rowTA(i + 1); ta.setSelectionRange(0, 0);
+  }
+  function mergeNext(i) {
+    if (i + 1 >= segs.length) return;
+    const a = segs[i], b = segs[i + 1];
+    segs.splice(i, 2, { start: a.start, end: b.end, speaker: a.speaker || b.speaker, text: (a.text.trim() + " " + b.text.trim()).trim(), done: a.done && b.done });
+    render(); markDirty();
+    focusSeg(i, false, false);
+  }
+
+  // ---------------- drafts / meta ----------------
+  function draftKey(id) { return "watsejy-draft-" + id; }
+  function loadDraft(id) { try { const v = localStorage.getItem(draftKey(id)); return v ? JSON.parse(v) : null; } catch { return null; } }
+  function saveDraft() { if (!job) return; try { localStorage.setItem(draftKey(job.id), JSON.stringify(segs)); } catch {} }
+  function clearDraft() { if (!job) return; try { localStorage.removeItem(draftKey(job.id)); } catch {} }
+  function markDirty() { dirty = true; updateMeta(); clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 500); }
+  function updateMeta(note) {
+    const n = segs.filter(s => s.done).length;
+    $("prog").innerHTML = `<b>${n}</b> / ${segs.length} reëls nagegaan`;
+    $("dirty").textContent = note || (dirty ? "ongestoorde veranderinge (konsep bewaar)" : "");
+    $("dirty").className = note ? "draft" : (dirty ? "dirty" : "");
+  }
+  window.addEventListener("beforeunload", e => { if (dirty) { saveDraft(); e.preventDefault(); e.returnValue = ""; } });
+
+  // ---------------- rename speakers ----------------
   $("rename-btn").addEventListener("click", () => {
     const map = {};
     $("rename").value.split(/[,;\n]/).forEach(p => { const m = p.match(/^\s*(\d+)\s*[=:]\s*(.+?)\s*$/); if (m) map["SPREKER " + m[1]] = m[2]; });
@@ -250,13 +377,15 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
     if (!keys.length) { $("rename-msg").textContent = "Gee name soos 1=Johannes, 2=Pietie"; return; }
     let n = 0;
     segs.forEach(s => { if (s.speaker && map[s.speaker]) { s.speaker = map[s.speaker]; n++; } });
-    render(); highlight();
+    render(); markDirty();
     $("rename-msg").textContent = `${n} reëls hernoem (${keys.map(k => k + " → " + map[k]).join(", ")}).`;
   });
+  $("markall").addEventListener("click", () => { segs.forEach(s => s.done = true); render(); markDirty(); });
 
-  // ---- export / copy / save ----
+  // ---------------- export / copy / save ----------------
+  function payloadSegs() { return segs.map(s => ({ start: s.start, end: s.end, speaker: s.speaker, text: s.text })); }
   async function exportAs(fmt) {
-    const r = await fetch(`/api/jobs/${job.id}/export`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fmt, segments: segs }) });
+    const r = await fetch(`/api/jobs/${job.id}/export`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fmt, segments: payloadSegs() }) });
     const blob = await r.blob();
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = job.name.replace(/\.[^.]+$/, "") + "." + fmt; a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
@@ -271,11 +400,14 @@ kbd { font: 0.78rem ui-monospace, Menlo, monospace; background: var(--surface); 
   });
   $("save").addEventListener("click", async () => {
     const btn = $("save"); btn.disabled = true;
+    const open = segs.length - segs.filter(s => s.done).length;
+    if (open > 0 && !window.confirm(`${open} reëls is nog nie as nagegaan gemerk nie. Tog stoor?`)) { btn.disabled = false; return; }
     try {
       const r = await fetch(`/api/jobs/${job.id}/save`, { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ segments: segs, source: $("source").value, codeswitch: $("cs").checked }) });
+        body: JSON.stringify({ segments: payloadSegs(), source: $("source").value, codeswitch: $("cs").checked }) });
       if (!r.ok) throw new Error(await r.text());
       const j = await r.json();
+      dirty = false; clearDraft(); updateMeta();
       $("save-msg").className = "msg ok";
       $("save-msg").textContent = `Gestoor in ${j.dir} (oudio gekopieer, transkripsie geskryf, ry bygevoeg by corrections.jsonl).`;
     } catch (e) { $("save-msg").className = "msg"; $("save-msg").textContent = "Kon nie stoor nie: " + e.message; }

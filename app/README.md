@@ -51,13 +51,16 @@ Speakers come out as `SPREKER 1`, `SPREKER 2` …; rename them in the page (next
 python app/web.py
 ```
 
-A browser tab opens at http://127.0.0.1:7861. Drag a voice note or recording onto the page (tick "Benoem sprekers" first for meetings). When it finishes you get one line per segment with its timestamp, speaker and text:
+A browser tab opens at http://127.0.0.1:7861. Drag a voice note or recording onto the page (tick "Benoem sprekers" first for meetings). The transcript is cut into short lines of a few seconds each, using word timestamps, so every line is a quick listen.
 
-- Click a timestamp to play from there. The line being played is highlighted.
-- Edit the text in place. Boxes grow as you type.
-- `Esc` plays or pauses. `⌘↓` / `⌘↑` jumps to the next or previous line and plays it. `⌘←` goes back three seconds. `⌘Enter` replays the current line. The speed menu slows the audio for fast talkers.
+The correction loop is: the line plays, you fix the text, you press `Enter`. That marks the line as checked and jumps to the next one, which starts playing. A counter in the player bar shows how many lines are checked.
+
+- Clicking into a line plays it ("Speel by kies"). Click a timestamp to play from there.
+- `Esc` plays or pauses. `⌘Enter` replays the line. `⟳ Herhaal` loops it. `⌘←` goes back three seconds. The speed menu slows fast talkers.
+- `⌘↓` / `⌘↑` moves between lines. `⌘D` toggles the checked mark. "Volg oudio" scrolls the page along with playback when you are not typing.
+- `Shift+Enter` splits a line at the cursor; `⌘⇧M` (or the ⤓ button) merges a line with the next one. Use these when the automatic cut lands in the wrong place.
 - Rename speakers once for the whole file with `1=Johannes, 2=Pietie`, or type a name on any line.
-- Download `.txt`, `.md` or `.srt`, or copy the plain text.
+- Your edits are kept as a draft in the browser as you type, so a refresh or a crash does not lose them. Download `.txt`, `.md` or `.srt`, or copy the plain text.
 
 The older one-box page is still there if you prefer it: `python app/ui.py` (port 7860). Its `--share` flag prints a temporary public link that routes to your Mac, which is the simplest way to let Pietie try it for a session. Only share audio that way with people who have consented.
 

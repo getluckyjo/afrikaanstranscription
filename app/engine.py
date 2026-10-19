@@ -187,7 +187,12 @@ def _transcribe_mlx(wav: Path, model: str, language: str) -> list[Segment]:
         language=language,
         task="transcribe",
         condition_on_previous_text=False,
+        word_timestamps=True,
     )
+    words = [(float(w["start"]), float(w["end"]), str(w["word"]))
+             for s in result.get("segments", []) for w in (s.get("words") or [])]
+    if words:
+        return rechunk(words)
     return [Segment(float(s["start"]), float(s["end"]), s["text"]) for s in result.get("segments", [])]
 
 
@@ -202,8 +207,43 @@ def _transcribe_ct2(wav: Path, model: str, language: str) -> list[Segment]:
         m = WhisperModel(model, device="cpu", compute_type="int8")
         _CT2_CACHE[model] = m
     segments, _info = m.transcribe(load_wav16k(wav), language=language, beam_size=5, vad_filter=True,
-                                   condition_on_previous_text=False)
+                                   condition_on_previous_text=False, word_timestamps=True)
+    segments = list(segments)
+    words = [(float(w.start), float(w.end), str(w.word)) for s in segments for w in (s.words or [])]
+    if words:
+        return rechunk(words)
     return [Segment(float(s.start), float(s.end), s.text) for s in segments]
+
+
+def rechunk(words, max_dur: float = 9.0, max_chars: int = 140, pause: float = 0.7, min_dur: float = 2.0) -> list[Segment]:
+    """Cut a word stream into short editable lines.
+
+    Breaks after sentence punctuation once a line is at least `min_dur` long,
+    at silences longer than `pause`, and never lets a line run past `max_dur`
+    seconds or `max_chars` characters."""
+    out: list[Segment] = []
+    cur: list[tuple[float, float, str]] = []
+
+    def flush():
+        if cur:
+            text = "".join(w for _, _, w in cur).strip()
+            if text:
+                out.append(Segment(cur[0][0], cur[-1][1], text))
+        cur.clear()
+
+    for i, (ws, we, wt) in enumerate(words):
+        if not wt.strip():
+            continue
+        cur.append((ws, we, wt))
+        dur = we - cur[0][0]
+        chars = sum(len(w) for _, _, w in cur)
+        nxt = words[i + 1] if i + 1 < len(words) else None
+        gap = (nxt[0] - we) if nxt else 0.0
+        ends_sentence = wt.rstrip().endswith((".", "?", "!"))
+        if (ends_sentence and dur >= min_dur) or (gap > pause and dur >= min_dur) or dur >= max_dur or chars >= max_chars:
+            flush()
+    flush()
+    return out
 
 
 # ---------------------------------------------------------------- diarization
