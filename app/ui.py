@@ -79,7 +79,7 @@ def save(txt, source, codeswitch, t):
 
 def build() -> gr.Blocks:
     with gr.Blocks(title="Watsejy") as demo:
-        gr.Markdown("# Watsejy\n**Jy praat. Ons tik.** Afrikaanse oudio na teks, op jou eie Mac. Niks verlaat die rekenaar nie.")
+        gr.Markdown("# Watsejy\n**Wat sê jy?** Jy praat. Ons tik. Afrikaanse oudio na teks, op jou eie Mac. Niks verlaat die rekenaar nie.")
         state = gr.State(None)
 
         with gr.Row():

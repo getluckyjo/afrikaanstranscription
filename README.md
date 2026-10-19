@@ -1,6 +1,6 @@
 # Watsejy (watsejy.co.za)
 
-**Jy praat. Ons tik.** Local-first Afrikaans speech-to-text for meetings and WhatsApp voice notes.
+**Wat sê jy?** Jy praat. Ons tik. Local-first Afrikaans speech-to-text for meetings and WhatsApp voice notes.
 
 This repository currently holds **Phase 0**: the research, the legal groundwork, and the benchmark harness that decides which Afrikaans model ships in the app. Nothing here processes user audio in production yet.
 
