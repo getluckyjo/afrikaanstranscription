@@ -17,7 +17,8 @@ cat > "$TARGET" <<EOF
 cd "$REPO" || { echo "Kon nie $REPO vind nie"; read -r; exit 1; }
 printf '\\033]0;Watsejy\\007'
 clear
-echo "  WATSEJY  ·  Wat sê jy?  ·  Jy praat. Ons tik."
+echo "  WATSEJY  ·  Wat sê jy"
+echo "  Jy praat. Ons tik."
 echo
 echo "  Die blaaier maak oop by http://127.0.0.1:7861"
 echo "  Maak hierdie venster toe (of druk Ctrl+C) om te stop."
