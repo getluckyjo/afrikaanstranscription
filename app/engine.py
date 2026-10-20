@@ -346,7 +346,7 @@ _RENAME_RE = re.compile(r"^\s*(\d+)\s*[=:]\s*(.+?)\s*$")
 
 
 def parse_rename(spec: str) -> dict[str, str]:
-    """'1=Johannes, 2=Pietie' -> {'SPREKER 1': 'Johannes', 'SPREKER 2': 'Pietie'}."""
+    """'1=Johannes, 2=Carla' -> {'SPREKER 1': 'Johannes', 'SPREKER 2': 'Carla'}."""
     out = {}
     for part in re.split(r"[,\n;]", spec or ""):
         m = _RENAME_RE.match(part)

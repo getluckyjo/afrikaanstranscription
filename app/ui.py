@@ -2,7 +2,7 @@
 """Watsejy drag-and-drop page (Gradio), running locally on your Mac.
 
     python app/ui.py            # opens http://127.0.0.1:7860
-    python app/ui.py --share    # also prints a temporary public link (for Pietie)
+    python app/ui.py --share    # also prints a temporary public link (for Carla)
 
 Drop a voice note or meeting recording, get an editable transcript with speaker
 labels, rename the speakers, download it, and save your corrected version to
@@ -56,7 +56,7 @@ def run(file, speakers, num_speakers, progress=gr.Progress()):
 def rename(txt, spec, t):
     mapping = engine.parse_rename(spec)
     if not mapping:
-        return txt, "Gee name soos `1=Johannes, 2=Pietie`.", gr.update()
+        return txt, "Gee name soos `1=Johannes, 2=Carla`.", gr.update()
     new_txt = engine.rename_speakers_in_text(txt, mapping)
     for s in (t.segments if t else []):
         if s.speaker in mapping:
@@ -95,7 +95,7 @@ def build() -> gr.Blocks:
 
         with gr.Accordion("Hernoem sprekers", open=False):
             with gr.Row():
-                spec = gr.Textbox(label="Name", placeholder="1=Johannes, 2=Pietie", scale=3)
+                spec = gr.Textbox(label="Name", placeholder="1=Johannes, 2=Carla", scale=3)
                 ren = gr.Button("Pas toe", scale=1)
             ren_status = gr.Markdown("")
 

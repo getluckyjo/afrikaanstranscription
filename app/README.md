@@ -59,10 +59,10 @@ The correction loop is: the line plays, you fix the text, you press `Enter`. Tha
 - `Esc` plays or pauses. `⌘Enter` replays the line. `⟳ Herhaal` loops it. `⌘←` goes back three seconds. The speed menu slows fast talkers.
 - `⌘↓` / `⌘↑` moves between lines. `⌘D` toggles the checked mark. "Volg oudio" scrolls the page along with playback when you are not typing.
 - `Shift+Enter` splits a line at the cursor; `⌘⇧M` (or the ⤓ button) merges a line with the next one. Use these when the automatic cut lands in the wrong place.
-- Rename speakers once for the whole file with `1=Johannes, 2=Pietie`, or type a name on any line.
+- Rename speakers once for the whole file with `1=Johannes, 2=Carla`, or type a name on any line.
 - Your edits are kept as a draft in the browser as you type, so a refresh or a crash does not lose them. Download `.txt`, `.md` or `.srt`, or copy the plain text.
 
-The older one-box page is still there if you prefer it: `python app/ui.py` (port 7860). Its `--share` flag prints a temporary public link that routes to your Mac, which is the simplest way to let Pietie try it for a session. Only share audio that way with people who have consented.
+The older one-box page is still there if you prefer it: `python app/ui.py` (port 7860). Its `--share` flag prints a temporary public link that routes to your Mac, which is the simplest way to let Carla try it for a session. Only share audio that way with people who have consented.
 
 ## 4b. Desktop shortcut (no Terminal needed after this)
 

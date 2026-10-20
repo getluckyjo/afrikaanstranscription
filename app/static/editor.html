@@ -187,7 +187,7 @@ details.help ul { margin: 6px 0 0; padding-left: 18px; text-transform: none; let
     <div class="card" id="rename-card">
       <h3>Hernoem sprekers</h3>
       <div class="row">
-        <input type="text" id="rename" placeholder="1=Johannes, 2=Pietie" style="flex:1;min-width:220px">
+        <input type="text" id="rename" placeholder="1=Johannes, 2=Carla" style="flex:1;min-width:220px">
         <button id="rename-btn">Pas toe</button>
       </div>
       <div class="msg" id="rename-msg"></div>
@@ -415,7 +415,7 @@ details.help ul { margin: 6px 0 0; padding-left: 18px; text-transform: none; let
     const map = {};
     $("rename").value.split(/[,;\n]/).forEach(p => { const m = p.match(/^\s*(\d+)\s*[=:]\s*(.+?)\s*$/); if (m) map["SPREKER " + m[1]] = m[2]; });
     const keys = Object.keys(map);
-    if (!keys.length) { $("rename-msg").textContent = "Gee name soos 1=Johannes, 2=Pietie"; return; }
+    if (!keys.length) { $("rename-msg").textContent = "Gee name soos 1=Johannes, 2=Carla"; return; }
     let n = 0;
     segs.forEach(s => { if (s.speaker && map[s.speaker]) { s.speaker = map[s.speaker]; n++; } });
     render(); markDirty();

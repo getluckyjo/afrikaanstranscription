@@ -1,16 +1,14 @@
 # Watsejy data lead brief
 
-_For Pietie Beyers. A working brief for the person who collects and transcribes the Afrikaans speech that Watsejy is measured and trained on. Johannes owns the project; this document says what the data job is, why it matters more than anything else in Phase 0, and how to do it so the recordings are legally usable._
+_For Carla le Roux. A working brief for the person who collects and transcribes the Afrikaans speech that Watsejy is measured and trained on. Johannes owns the project; this document says what the data job is, why it matters more than anything else in Phase 0, and how to do it so the recordings are legally usable._
 
 ## Why this job decides the product
 
 Watsejy turns Afrikaans meetings and WhatsApp voice notes into text on the user's own device. The speech models we start from are public and anyone can use them. What nobody has is a few hours of real, consented, carefully transcribed Afrikaans as people actually speak it in meetings and voice notes: fast, mixed with English, over a phone mic, with background noise. Research we rely on found that five minutes of audio that matches the real use case taught a model as much as fifty hours that did not. The person who builds that dataset builds the only thing about Watsejy that cannot be copied.
 
-## Why an actor, and the one trap
+## The one trap: collect conversations, never performances
 
-An actor brings an ear for register and accent, comfort with microphones, a network of Afrikaans speakers across ages and regions, and the judgement to hear when a transcript is wrong. All of that is exactly what the job needs.
-
-The trap is performance. The model must learn ordinary speech, not delivered speech. A scene, a monologue or a read script is clean and expressive, and the models already handle that kind of audio well. What they fail on is the hesitant, overlapping, half-English talk of a real committee meeting. So the rule is: **collect conversations, never performances.** Pietie's craft is used to recruit, to set people at ease, and to hear errors, not to produce the audio himself.
+The model must learn ordinary speech, not delivered speech. Someone reading a script, a prepared speech or a rehearsed message is clean and tidy, and the models already handle that kind of audio well. What they fail on is the hesitant, overlapping, half-English talk of a real committee meeting or a voice note sent while walking to the car. So the rule is simple: **record people talking as they normally do, and never ask anyone to read or perform.** The job is recruiting, putting people at ease, keeping the consent paperwork straight, and listening carefully enough to hear when a transcript is wrong.
 
 ## What to collect
 
@@ -54,7 +52,7 @@ Every voice in every recording belongs to someone, and under POPIA a voice recor
 
 1. Before recording, each participant signs `legal/CONSENT_RECORDING.md`. For a meeting, every person signs their own form.
 2. For existing recordings someone already owns (a podcast, a YouTube channel), the owner signs `legal/LICENCE_LETTER_CONTENT.md`.
-3. Both forms state what the audio is for and what it is not for. In particular, **the recordings will never be used to synthesise, clone or imitate anyone's voice.** They train a model that listens; they will never train one that speaks. This matters to actors and should be said out loud when asking.
+3. Both forms state what the audio is for and what it is not for. In particular, **the recordings will never be used to synthesise, clone or imitate anyone's voice.** They train a model that listens; they will never train one that speaks. Say this out loud when asking; people whose voice is part of their work care about it most.
 4. Give each signed form a number (`C-0001`, `C-0002` …), store the forms in a folder separate from the audio, and write the number on every recording that it covers.
 5. Anyone can withdraw later. Keep contact details so the recording can be found and deleted.
 
@@ -76,7 +74,7 @@ A transcript is only useful if everyone writes the same way. The rules:
 Typing verbatim from scratch takes six to ten hours per hour of audio. Correcting a good machine transcript takes two to three. The workflow:
 
 1. Johannes runs each recording through the current best model and sends back a draft with timestamps.
-2. Pietie listens and corrects the draft against the audio, applying the conventions above.
+2. Carla listens and corrects the draft against the audio, applying the conventions above.
 3. Mark speaker turns for meeting recordings.
 4. Return the corrected text; it goes into the manifest with the recording's consent number.
 
@@ -90,7 +88,7 @@ Any free editor works for Phase 0 (a text file beside the audio). If volume grow
 
 ## Credit and compensation
 
-[To agree between Johannes and Pietie: hourly or per-audio-hour rate, or a share in the project, plus a named credit in the app's About screen and the attribution file.]
+[To agree between Johannes and Carla: how the work is recognised, plus a named credit in the app's About screen and the attribution file.]
 
 ## Contacts
 
